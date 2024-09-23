@@ -17,6 +17,7 @@ const reviewRouter = require('./routes/reviewRoutes');
 
 const app = express();
 
+// Start express app
 app.use(
   cors({
     origin: 'http://localhost:4200',
