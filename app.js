@@ -21,7 +21,7 @@ const app = express();
 // Start express app
 app.use(
   cors({
-    origin: 'http://localhost:4200',
+    origin: 'http://54.211.125.64:4200/',
     credentials: true,
   }),
 );
