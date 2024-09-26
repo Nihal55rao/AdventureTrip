@@ -11,6 +11,20 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v3
+      - name: Create config.env file
+        run: |
+          echo "NODE_ENV=${{ secrets.NODE_ENV }}" > config.env
+          echo "PORT=${{ secrets.PORT }}" >> config.env
+          echo "USER=${{ secrets.USER }}" >> config.env
+          echo "DATABASE=${{ secrets.DATABASE }}" >> config.env
+          echo "DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}" >> config.env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> config.env
+          echo "JWT_EXPIRES_IN=${{ secrets.JWT_EXPIRES_IN }}" >> config.env
+          echo "JWT_COOKIE_EXPIRES_IN=${{ secrets.JWT_COOKIE_EXPIRES_IN }}" >> config.env
+          echo "EMAIL_USERNAME=${{ secrets.EMAIL_USERNAME }}" >> config.env
+          echo "EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}" >> config.env
+          echo "EMAIL_HOST=${{ secrets.EMAIL_HOST }}" >> config.env
+          echo "EMAIL_PORT=${{ secrets.EMAIL_PORT }}" >> config.env
       - name: Login to docker hub
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
       - name: Build docker image
