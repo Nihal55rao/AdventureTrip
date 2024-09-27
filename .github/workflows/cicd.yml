@@ -1,18 +1,16 @@
-name: Deploy Node Application
+name: Deploy Node Application to Dev
 
 on:
-  push:
+  push: 
     branches:
-      - mean-ec2-docker
+      - dev
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout source
-        uses: actions/checkout@v3
-
+        uses: actions/checkout@v4
       - name: Create config.env file
         run: |
           echo "NODE_ENV=${{ secrets.NODE_ENV }}" > config.env
@@ -27,35 +25,20 @@ jobs:
           echo "EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}" >> config.env
           echo "EMAIL_HOST=${{ secrets.EMAIL_HOST }}" >> config.env
           echo "EMAIL_PORT=${{ secrets.EMAIL_PORT }}" >> config.env
-
       - name: Login to docker hub
-        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}       
       - name: Build docker image
-        run: docker build -t nihalr2001/adventuretrip-nodejs-app .
-
+        run: docker build -t nihalr2001/adventuretrip-nodejs-app-dev .  
       - name: Publish image to docker hub
-        run: docker push nihalr2001/adventuretrip-nodejs-app:latest
-
+        run: docker push nihalr2001/adventuretrip-nodejs-app-dev:latest
+        
   deploy:
     needs: build
     runs-on: self-hosted
-
     steps:
       - name: Pull image from docker hub
-        run: docker pull nihalr2001/adventuretrip-nodejs-app:latest
-
-      - name: Stop and remove old container if exists
-        run: |
-          if [ $(docker ps -q -f name=nodejs-app-container) ]; then
-            docker stop nodejs-app-container
-            docker rm nodejs-app-container
-          fi
-
+        run: docker pull nihalr2001/adventuretrip-nodejs-app-dev:latest
+      - name: Delete old container
+        run: docker rm -f nodejs-app-container  
       - name: Run docker container
-        run: |
-          docker run -d \
-            --name nodejs-app-container \
-            -p 3000:3000 \
-            --env-file config.env \
-            nihalr2001/adventuretrip-nodejs-app:latest
+        run: docker run -d -p 3000:3000 --name nodejs-app-container nihalr2001/adventuretrip-nodejs-app-dev
