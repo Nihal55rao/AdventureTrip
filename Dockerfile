@@ -2,9 +2,6 @@ FROM node:alpine3.18
 WORKDIR /app
 COPY package.json ./
 RUN npm install
-# Install nodemon globally
-RUN npm install -g nodemon
 COPY . .
 EXPOSE 3000
-# Command to run the application
-CMD ["nodemon", "server.js"]
+CMD [ "npm", "run", "start" ]
