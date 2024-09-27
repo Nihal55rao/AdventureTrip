@@ -18,14 +18,27 @@ const reviewRouter = require('./routes/reviewRoutes');
 
 const app = express();
 
+// List of allowed origins
+const allowedOrigins = [
+  'http://localhost:4200',
+  'http://3.87.67.197:4200', // Add your Angular app's URL
+  // Add more origins as needed
+];
+
 // Start express app
 app.use(
   cors({
-    origin: 'http://3.87.67.197:4200',
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps or Postman)
+      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true); // Allow the request
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true,
   }),
 );
-
 //1)GLOBAL MIDDLEWARES
 //set security HTTP headers
 app.use(helmet());
