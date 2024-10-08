@@ -28,17 +28,17 @@ jobs:
       - name: Login to docker hub
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}       
       - name: Build docker image
-        run: docker build -t nihalr2001/adventuretrip-nodejs-app-dev .  
+        run: docker build -t nihalr2001/adventuretrip-be-dev .  
       - name: Publish image to docker hub
-        run: docker push nihalr2001/adventuretrip-nodejs-app-dev:latest
+        run: docker push nihalr2001/adventuretrip-be-dev:latest
         
   deploy:
     needs: build
     runs-on: self-hosted
     steps:
       - name: Pull image from docker hub
-        run: docker pull nihalr2001/adventuretrip-nodejs-app-dev:latest
+        run: docker pull nihalr2001/adventuretrip-be-dev:latest
       - name: Delete old container
         run: docker rm -f nodejs-app-container  
       - name: Run docker container
-        run: docker run -d -p 3000:3000 --name nodejs-app-container nihalr2001/adventuretrip-nodejs-app-dev
+        run: docker run -d -p 3000:3000 --name nodejs-app-container nihalr2001/adventuretrip-be-dev

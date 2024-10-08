@@ -21,7 +21,7 @@ const app = express();
 // List of allowed origins
 const allowedOrigins = [
   'http://localhost:4200',
-  'http://34.207.167.163:4200', // Add your Angular app's URL
+  'http://34.228.235.216:4200', // Add your Angular app's URL
   // Add more origins as needed
 ];
 
